@@ -1,8 +1,10 @@
 const express = require("express");
 const app = express();
-const { getTopics } = require("./controller")
+const { getTopics, getEndpoints } = require("./controller")
 
 app.get("/api/topics", getTopics)
+
+app.get("/api", getEndpoints)
 
 app.use((err, req, res, next) => {
   if (err.status && err.msg) {
