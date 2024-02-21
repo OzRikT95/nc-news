@@ -3,7 +3,8 @@ const app = require('../app');
 const db = require("../db/connection")
 const seed = require("../db/seeds/seed")
 const testData = require("../db/data/test-data/index")
-const endpoints = require("../endpoints.json")
+const endpoints = require("../endpoints.json");
+const { expect } = require('@jest/globals');
 
 beforeEach(() => seed(testData))
 afterAll(() => db.end())
@@ -50,6 +51,7 @@ describe('GET /api/articles/:article_id', () => {
 describe('GET /api/articles', () => {
   test('responds with articles a get requested is used', async () => {
     const { body } = await request(app).get("/api/articles").expect(200)
+    expect(body.articles.length).not.toBe(0)
     body.articles.forEach(article => {
       expect(article).toEqual(expect.objectContaining({
         article_id: expect.any(Number),
