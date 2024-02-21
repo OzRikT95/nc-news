@@ -47,3 +47,24 @@ describe('GET /api/articles/:article_id', () => {
     expect(body.msg).toBe("bad request")
   });
 });
+describe('GET /api/articles', () => {
+  test('responds with articles a get requested is used', async () => {
+    const { body } = await request(app).get("/api/articles").expect(200)
+    body.articles.forEach(article => {
+      expect(article).toEqual(expect.objectContaining({
+        article_id: expect.any(Number),
+        title: expect.any(String),
+        topic: expect.any(String),
+        author: expect.any(String),
+        body: expect.any(String),
+        created_at: expect.any(String),
+        votes: expect.any(Number),
+        article_img_url: expect.any(String)
+      }))
+    });
+  });
+  test('responds with all articles, in descending order by date', async () => {
+    const { body } = await request(app).get("/api/articles").expect(200)
+    expect(body.articles).toBeSortedBy("created_at", { descending: true })
+  });
+});

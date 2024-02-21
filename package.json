@@ -25,7 +25,8 @@
     "jest": "^27.5.1",
     "jest-extended": "^2.0.0",
     "pg-format": "^1.0.4",
-    "supertest": "^6.3.4"
+    "supertest": "^6.3.4",
+    "jest-sorted": "^1.0.15"
   },
   "dependencies": {
     "dotenv": "^16.0.0",
@@ -34,7 +35,8 @@
   },
   "jest": {
     "setupFilesAfterEnv": [
-      "jest-extended/all"
+      "jest-extended/all",
+      "jest-sorted"
     ]
   }
 }

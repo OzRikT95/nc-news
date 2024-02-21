@@ -1,12 +1,14 @@
 const express = require("express");
 const app = express();
-const { getTopics, getEndpoints, getArticlesById } = require("./controller")
+const { getTopics, getEndpoints, getArticlesById, getAllArticles } = require("./controller")
 
 app.get("/api/topics", getTopics)
 
 app.get("/api", getEndpoints)
 
 app.get("/api/articles/:article_id", getArticlesById)
+
+app.get("/api/articles", getAllArticles)
 
 app.use((err, req, res, next) => {
   if (err.status && err.msg) {
@@ -23,4 +25,5 @@ app.use((err, req, res, next) => {
 app.all("*", (req, res) => {
   res.status(404).send({ msg: "not found" })
 })
+
 module.exports = app;
