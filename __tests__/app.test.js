@@ -70,3 +70,27 @@ describe('GET /api/articles', () => {
     expect(body.articles).toBeSortedBy("created_at", { descending: true })
   });
 });
+describe('GET /api/articles/article_id/comments', () => {
+  test('respond with comments bt article_id with a GET request', async () => {
+    const { body } = await request(app).get("/api/articles/1/comments").expect(200)
+    expect(body.comments.length).not.toBe(0)
+    body.comments.forEach(comment => {
+      expect(comment).toEqual(expect.objectContaining({
+        comment_id: expect.any(Number),
+        votes: expect.any(Number),
+        created_at: expect.any(String),
+        author: expect.any(String),
+        body: expect.any(String),
+        article_id: expect.any(Number)
+      }))
+    })
+  });
+  test('respond with err when valid id but non-existant', async () => {
+    const { body } = await request(app).get("/api/articles/100000000/comments").expect(404)
+    expect(body.msg).toBe("not found")
+  });
+  test('respond with err when invalid id', async () => {
+    const { body } = await request(app).get("/api/articles/one/comments").expect(400)
+    expect(body.msg).toBe("bad request")
+  });
+});

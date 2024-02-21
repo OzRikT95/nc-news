@@ -1,4 +1,4 @@
-const { getAllTopics, getArticleById, getArticles } = require("./model")
+const { getAllTopics, getArticleById, getArticles, getComments } = require("./model")
 const fs = require("fs/promises")
 const path = require("path")
 
@@ -34,4 +34,13 @@ function getAllArticles(req, res, next) {
     .catch(next)
 }
 
-module.exports = { getTopics, getEndpoints, getArticlesById, getAllArticles }
+function getAllComments(req, res, next) {
+  const { article_id } = req.params
+  getComments(article_id)
+    .then((comments) => {
+      res.status(200).send({ comments })
+    })
+    .catch(next)
+}
+
+module.exports = { getTopics, getEndpoints, getArticlesById, getAllArticles, getAllComments }

@@ -26,4 +26,15 @@ function getArticles() {
     })
 }
 
-module.exports = { getAllTopics, getArticleById, getArticles }
+function getComments(articleId) {
+  return db
+    .query('SELECT * FROM comments WHERE article_id = $1', [articleId])
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        return Promise.reject({ status: 404, msg: "not found" })
+      }
+      return rows
+    })
+}
+
+module.exports = { getAllTopics, getArticleById, getArticles, getComments }
