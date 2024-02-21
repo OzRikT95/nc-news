@@ -18,4 +18,12 @@ function getArticleById(articleId) {
     })
 }
 
-module.exports = { getAllTopics, getArticleById }
+function getArticles() {
+  return db
+    .query('SELECT * FROM articles ORDER BY created_at DESC')
+    .then(({ rows }) => {
+      return rows
+    })
+}
+
+module.exports = { getAllTopics, getArticleById, getArticles }
