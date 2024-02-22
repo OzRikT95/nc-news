@@ -18,13 +18,13 @@ function getArticleById(articleId) {
 }
 function getArticles(topic) {
   let query = "SELECT * FROM articles";
-  const values = [];
+  const topics = [];
   if (topic) {
     query += " WHERE topic = $1";
-    values.push(topic);
+    topics.push(topic);
   }
   query += " ORDER BY created_at DESC";
-  return db.query(query, values).then(({ rows }) => {
+  return db.query(query, topics).then(({ rows }) => {
     if (rows.length === 0) {
       throw { status: 404, msg: "not found" };
     }
