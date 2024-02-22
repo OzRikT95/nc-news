@@ -15,7 +15,6 @@ function getArticleById(articleId) {
       return rows[0];
     });
 }
-
 function getArticles() {
   return db
     .query("SELECT * FROM articles ORDER BY created_at DESC")
@@ -23,7 +22,6 @@ function getArticles() {
       return rows;
     });
 }
-
 function getComments(articleId) {
   return db
     .query("SELECT * FROM articles WHERE article_id = $1", [articleId])
@@ -39,7 +37,6 @@ function getComments(articleId) {
       }
     });
 }
-
 function insertComment({ username, body }, articleId) {
   return db
     .query("SELECT * FROM articles WHERE article_id = $1", [articleId])
@@ -56,7 +53,6 @@ function insertComment({ username, body }, articleId) {
       return rows[0];
     });
 }
-
 function updateArticleVotes(articleId, newVotes) {
   return db
     .query(
@@ -70,6 +66,18 @@ function updateArticleVotes(articleId, newVotes) {
       return rows[0];
     });
 }
+function deleteComment(commentId) {
+  return db
+    .query("DELETE FROM comments WHERE comment_id = $1 RETURNING *;", [
+      commentId,
+    ])
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        throw { status: 404, msg: "not found" };
+      }
+      return rows;
+    });
+}
 
 module.exports = {
   getAllTopics,
@@ -77,5 +85,6 @@ module.exports = {
   getArticles,
   getComments,
   insertComment,
-  updateArticleVotes
+  updateArticleVotes,
+  deleteComment,
 };

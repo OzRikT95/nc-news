@@ -154,7 +154,6 @@ describe("PATCH /api/articles/:article_id", () => {
       .patch("/api/articles/1")
       .send({ new_votes: 1 })
       .expect(200);
-      console.log(body);
     expect(body.article.votes).toBe(101);
   });
   test("responds with err for valid but non-existant id", async () => {
@@ -176,6 +175,21 @@ describe("PATCH /api/articles/:article_id", () => {
       .patch("/api/articles/1")
       .send({ new_votes: "one" })
       .expect(400);
+    expect(body.msg).toBe("bad request");
+  });
+});
+describe("DELETE /api/comments/:comment_id", () => {
+  test("respond with 204 for deleted comment", async () => {
+    await request(app).delete("/api/comments/1").expect(204);
+  });
+  test("respond with err with given valid id but non-existant", async () => {
+    const { body } = await request(app)
+      .delete("/api/comments/1000000")
+      .expect(404);
+    expect(body.msg).toBe("not found");
+  });
+  test("respond with err when given invalid id", async () => {
+    const { body } = await request(app).delete("/api/comments/one").expect(400);
     expect(body.msg).toBe("bad request");
   });
 });
