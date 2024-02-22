@@ -78,7 +78,13 @@ function deleteComment(commentId) {
       return rows;
     });
 }
-
+function getAllUsers() {
+  return db
+    .query("SELECT username, name, avatar_url FROM users")
+    .then(({ rows }) => {
+      return rows;
+    });
+}
 module.exports = {
   getAllTopics,
   getArticleById,
@@ -87,4 +93,5 @@ module.exports = {
   insertComment,
   updateArticleVotes,
   deleteComment,
+  getAllUsers,
 };

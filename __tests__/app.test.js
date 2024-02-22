@@ -193,3 +193,14 @@ describe("DELETE /api/comments/:comment_id", () => {
     expect(body.msg).toBe("bad request");
   });
 });
+describe("GET /api/users", () => {
+  test("responds with an array of users", async () => {
+    const { body } = await request(app).get("/api/users").expect(200);
+    console.log(body);
+    expect(body.users).toBeInstanceOf(Array);
+  });
+  test("respond with err when given invalid url", async () => {
+    const { body } = await request(app).get("/api/user").expect(404);
+    expect(body.msg).toBe("not found");
+  });
+});
