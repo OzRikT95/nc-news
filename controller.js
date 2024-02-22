@@ -35,7 +35,8 @@ function getArticlesById(req, res, next) {
     .catch(next);
 }
 function getAllArticles(req, res, next) {
-  getArticles()
+  const { topic } = req.query;
+  getArticles(topic)
     .then((articles) => {
       res.status(200).send({ articles });
     })

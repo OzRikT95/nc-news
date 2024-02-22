@@ -4,8 +4,6 @@ const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const testData = require("../db/data/test-data/index");
 const endpoints = require("../endpoints.json");
-const { expect } = require("@jest/globals");
-const { post } = require("superagent");
 
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
@@ -50,28 +48,44 @@ describe("GET /api/articles/:article_id", () => {
     expect(body.msg).toBe("bad request");
   });
 });
-describe("GET /api/articles", () => {
-  test("responds with articles a get requested is used", async () => {
-    const { body } = await request(app).get("/api/articles").expect(200);
-    expect(body.articles.length).not.toBe(0);
-    body.articles.forEach((article) => {
-      expect(article).toEqual(
-        expect.objectContaining({
-          article_id: expect.any(Number),
-          title: expect.any(String),
-          topic: expect.any(String),
-          author: expect.any(String),
-          body: expect.any(String),
-          created_at: expect.any(String),
-          votes: expect.any(Number),
-          article_img_url: expect.any(String),
-        })
-      );
+describe("/api/articles", () => {
+  describe("GET /api/articles", () => {
+    test("responds with articles when a get requested is used", async () => {
+      const { body } = await request(app).get("/api/articles").expect(200);
+      expect(body.articles.length).not.toBe(0);
+      body.articles.forEach((article) => {
+        expect(article).toEqual(
+          expect.objectContaining({
+            article_id: expect.any(Number),
+            title: expect.any(String),
+            topic: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            article_img_url: expect.any(String),
+          })
+        );
+      });
+    });
+    test("responds with all articles, in descending order by date", async () => {
+      const { body } = await request(app).get("/api/articles").expect(200);
+      expect(body.articles).toBeSortedBy("created_at", { descending: true });
     });
   });
-  test("responds with all articles, in descending order by date", async () => {
-    const { body } = await request(app).get("/api/articles").expect(200);
-    expect(body.articles).toBeSortedBy("created_at", { descending: true });
+  describe("GET /api/articles (topic query)", () => {
+    test("repond with array of articles filtered by topic", async () => {
+      const { body } = await request(app)
+        .get("/api/articles?topic=mitch")
+        .expect(200);
+      expect(body.articles).toBeInstanceOf(Array);
+    });
+    test("should repsond with err when no invalid topic ", async () => {
+      const { body } = await request(app)
+        .get("/api/articles?topic=mit")
+        .expect(404);
+      expect(body.msg).toBe("not found");
+    });
   });
 });
 describe("GET /api/articles/article_id/comments", () => {
@@ -196,7 +210,6 @@ describe("DELETE /api/comments/:comment_id", () => {
 describe("GET /api/users", () => {
   test("responds with an array of users", async () => {
     const { body } = await request(app).get("/api/users").expect(200);
-    console.log(body);
     expect(body.users).toBeInstanceOf(Array);
   });
   test("respond with err when given invalid url", async () => {
