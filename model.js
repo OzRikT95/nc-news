@@ -1,4 +1,5 @@
 const db = require("./db/connection");
+const { values } = require("./db/data/test-data/articles");
 
 function getAllTopics() {
   return db.query("SELECT slug, description FROM topics;").then(({ rows }) => {
@@ -15,13 +16,22 @@ function getArticleById(articleId) {
       return rows[0];
     });
 }
-function getArticles() {
-  return db
-    .query("SELECT * FROM articles ORDER BY created_at DESC")
-    .then(({ rows }) => {
-      return rows;
-    });
+function getArticles(topic) {
+  let query = "SELECT * FROM articles";
+  const values = [];
+  if (topic) {
+    query += " WHERE topic = $1";
+    values.push(topic);
+  }
+  query += " ORDER BY created_at DESC";
+  return db.query(query, values).then(({ rows }) => {
+    if (rows.length === 0) {
+      throw { status: 404, msg: "not found" };
+    }
+    return rows;
+  });
 }
+
 function getComments(articleId) {
   return db
     .query("SELECT * FROM articles WHERE article_id = $1", [articleId])
