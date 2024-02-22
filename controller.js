@@ -6,6 +6,7 @@ const {
   insertComment,
   updateArticleVotes,
   deleteComment,
+  getAllUsers,
 } = require("./model");
 
 const fs = require("fs/promises");
@@ -73,6 +74,13 @@ function removeComment(req, res, next) {
     })
     .catch(next);
 }
+function getUsers(req, res, next) {
+  getAllUsers()
+    .then((users) => {
+      res.status(200).send({ users });
+    })
+    .catch(next);
+}
 
 module.exports = {
   getTopics,
@@ -83,4 +91,5 @@ module.exports = {
   postComment,
   patchArticle,
   removeComment,
+  getUsers,
 };
