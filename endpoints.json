@@ -58,7 +58,10 @@
   },
   "PATCH /api/articles/:article_id": {
     "description": "serves an updated article, by article_id",
-    "queries": [],
+    "exampleRequest": {
+      "username": "rogersop",
+      "body": "This is my pushed comment"
+    },
     "exampleResponse": {
       "article": {
         "article_id": 1,
