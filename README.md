@@ -1,7 +1,28 @@
 # Northcoders News API
 
-If you have cloned this repo, you will need to do the following:
+# Hosted Northcoders New Api
 
-- create two .env files for your project: .env.test and .env.development
-- add PGDATABASE=, with the correct database name for that environment (see /db/setup.sql for the database names)
-- double check that these .env files are .gitignored
+https://nc-news-nwp8.onrender.com/
+
+# Summary of project
+
+# How to clone, install dependencies, seed local database and run tests
+
+Steps
+
+Cloning Repo
+- Head over to https://github.com/OzRikT95/nc-news
+- Click on the <> Code dropdown
+- Copy the HTTPS link provided
+- Head into your terminal and desired directory
+- type "git clone " + paste GitHub repo
+
+Installing dependencies
+
+Seeding local database
+
+Running tests
+
+# How to create .env files needed
+
+# Minimum versons of Node.js and Postgres required

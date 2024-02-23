@@ -58,7 +58,7 @@
   },
   "PATCH /api/articles/:article_id": {
     "description": "serves an updated article, by article_id",
-    "queries": ["article_id", "votes"],
+    "queries": [],
     "exampleResponse": {
       "article": {
         "article_id": 1,
