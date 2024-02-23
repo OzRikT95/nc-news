@@ -1,3 +1,5 @@
+const fs = require("fs/promises");
+const path = require("path");
 const {
   getAllTopics,
   getArticleById,
@@ -9,8 +11,6 @@ const {
   getAllUsers,
 } = require("./model");
 
-const fs = require("fs/promises");
-const path = require("path");
 function getTopics(req, res, next) {
   getAllTopics()
     .then((topics) => {
@@ -36,7 +36,16 @@ function getArticlesById(req, res, next) {
 }
 function getAllArticles(req, res, next) {
   const { topic } = req.query;
-  getArticles(topic)
+  getAllTopics()
+    .then((topics) => {
+      const topicsArr = topics.map((obj) => {
+        return obj.slug;
+      });
+      if (!topicsArr.includes(topic) && topic !== undefined) {
+        throw { status: 404, msg: "not found" };
+      }
+      return getArticles(topic);
+    })
     .then((articles) => {
       res.status(200).send({ articles });
     })
